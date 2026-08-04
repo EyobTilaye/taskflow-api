@@ -1,0 +1,40 @@
+
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: taskflow-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: taskflow
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: taskflow-api
+
+    ports:
+      - "4000:4000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - postgres
+
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+    command: npm run dev
+
+volumes:
+  postgres_data:
