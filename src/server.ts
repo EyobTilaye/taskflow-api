@@ -1,21 +1,32 @@
-import http from 'node:http';
-import { app } from './app';
-import { config } from './config/environment';
-import { logger } from './shared/logger/logger';
+import { createApp } from './app';
+import { logger } from './shared/utils/logger/logger';
+import { config } from './config/env';
 
-const server = http.createServer(app);
-
-const shutdown = (): void => {
-  logger.info('Server is shutting down gracefully');
-  server.close(() => {
-    logger.info('HTTP server closed');
-    process.exit(0);
-  });
+// Graceful shutdown
+const gracefulShutdown = async () => {
+  logger.info('Shutting down gracefully...');
+  process.exit(0);
 };
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception:', error);
+  process.exit(1);
+});
 
-server.listen(config.port, () => {
-  logger.info(`Server listening on port ${config.port}`);
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled Rejection:', reason);
+  process.exit(1);
+});
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+// Start server
+const app = createApp();
+const port = config.port;
+
+app.listen(port, () => {
+  logger.info(`🚀 Server running on port ${port}`);
+  logger.info(`📚 Environment: ${config.env}`);
+  logger.info(`📝 API Version: v${config.apiVersion}`);
 });

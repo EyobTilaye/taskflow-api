@@ -1,27 +1,42 @@
 import express from 'express';
-import helmet from 'helmet';
 import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
-import { config } from './config/environment';
-import { errorHandler } from './shared/middleware/error.middleware';
-import { notFoundHandler } from './shared/middleware/route-not-found.middleware';
+import { config } from './config/env';
+import { errorHandler } from './shared/middleware/errorHandler';
+import { logger } from './shared/utils/logger/logger';
 
-const app = express();
+export const createApp = () => {
+  const app = express();
 
-app.set('trust proxy', true);
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-app.use(morgan(config.logFormat));
+  // Security
+  app.use(helmet());
+  app.use(cors({ origin: config.security.corsOrigin }));
+  
+  // Logging
+  if (config.env !== 'production') {
+    app.use(morgan('dev'));
+  }
+  
+  // Body parsing
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "TaskFlow API is running",
+  // Health check
+  app.get('/health', (req, res) => {
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      version: config.apiVersion,
+      env: config.env,
+    });
   });
-});
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+  // API routes will be added here
+  // app.use(`/api/${config.apiVersion}/auth`, authRouter);
 
-export { app };
+  // Error handling
+  app.use(errorHandler);
+
+  return app;
+};
