@@ -26,7 +26,7 @@ const app = createApp();
 const port = config.port;
 
 app.listen(port, () => {
-  logger.info(`🚀 Server running on port ${port}`);
-  logger.info(`📚 Environment: ${config.env}`);
-  logger.info(`📝 API Version: v${config.apiVersion}`);
+  logger.info(`Server running on port ${port}`);
+  logger.info(`Environment: ${config.env}`);
+  logger.info(`API Version: v${config.apiVersion}`);
 });

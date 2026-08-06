@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { config } from './config/env';
 import { errorHandler } from './shared/middleware/errorHandler';
 import { logger } from './shared/utils/logger/logger';
+import { userRoutes } from './modules/user/user.routes';
 
 export const createApp = () => {
   const app = express();
@@ -34,6 +35,11 @@ export const createApp = () => {
 
   // API routes will be added here
   // app.use(`/api/${config.apiVersion}/auth`, authRouter);
+  app.use('/api/users/', userRoutes);
+
+
+
+
 
   // Error handling
   app.use(errorHandler);

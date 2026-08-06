@@ -109,23 +109,23 @@ Not included in Version 1.
 # 5. High-Level Architecture
 
 Client
-        │
-        ▼
+│
+▼
 Express Routes
-        │
-        ▼
+│
+▼
 Controllers
-        │
-        ▼
+│
+▼
 Services
-        │
-        ▼
+│
+▼
 Repositories
-        │
-        ▼
+│
+▼
 Prisma ORM
-        │
-        ▼
+│
+▼
 PostgreSQL
 
 Each layer has one responsibility.
@@ -218,13 +218,9 @@ Example
 Eyob
 
 ├── Startup
-│      Owner
-
-├── Gebeta Maps
-│      Member
-
+│ Owner
 └── Freelance Team
-       Admin
+Admin
 
 Therefore:
 
@@ -491,16 +487,16 @@ Deleted tasks are soft deleted.
 
 # 14. Permission Matrix
 
-| Action | Owner | Admin | Manager | Member | Guest |
-|----------|:----:|:----:|:-------:|:------:|:------:|
-| Create Organization | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Invite Members | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Remove Members | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Create Project | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Archive Project | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Create Task | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Assign Task | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Comment | ✅ | ✅ | ✅ | ✅ | Read Only |
+| Action              | Owner | Admin | Manager | Member |   Guest   |
+| ------------------- | :---: | :---: | :-----: | :----: | :-------: |
+| Create Organization |  ✅   |  ❌   |   ❌    |   ❌   |    ❌     |
+| Invite Members      |  ✅   |  ✅   |   ❌    |   ❌   |    ❌     |
+| Remove Members      |  ✅   |  ✅   |   ❌    |   ❌   |    ❌     |
+| Create Project      |  ✅   |  ✅   |   ✅    |   ❌   |    ❌     |
+| Archive Project     |  ✅   |  ✅   |   ❌    |   ❌   |    ❌     |
+| Create Task         |  ✅   |  ✅   |   ✅    |   ✅   |    ❌     |
+| Assign Task         |  ✅   |  ✅   |   ✅    |   ❌   |    ❌     |
+| Comment             |  ✅   |  ✅   |   ✅    |   ✅   | Read Only |
 
 ---
 
@@ -533,9 +529,9 @@ Always use HTTP status codes correctly.
 Example
 
 {
-  "success": false,
-  "message": "Project not found",
-  "errors": []
+"success": false,
+"message": "Project not found",
+"errors": []
 }
 
 ---
@@ -543,8 +539,8 @@ Example
 # 17. Success Response
 
 {
-  "success": true,
-  "data": {}
+"success": true,
+"data": {}
 }
 
 ---
