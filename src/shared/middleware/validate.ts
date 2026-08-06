@@ -6,7 +6,7 @@ export const validate = (schema: AnyZodObject, target: 'body' | 'query' | 'param
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Debug: Log what's being validated
-      console.log('🔍 Validating:', target, req[target]);
+      console.log('Validating:', target, req[target]);
       
       // Parse the data
       const validatedData = await schema.parseAsync(req[target]);
@@ -16,9 +16,9 @@ export const validate = (schema: AnyZodObject, target: 'body' | 'query' | 'param
       
       console.log('Validation passed');
       next();
-    } catch (error: unknown) {  // ✅ Use 'unknown' instead of 'any'
+    } catch (error: unknown) { 
       console.log('Validation failed:', error);
-      
+      console.log('\nhere\n');
       if (error instanceof ZodError) {
         // Format errors properly
         const formattedErrors = error.issues.map((issue) => ({

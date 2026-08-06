@@ -14,4 +14,5 @@ coverage/
 .claude/
 .husky/
 .windsurf/
+.prisma/
 /src/generated/prisma

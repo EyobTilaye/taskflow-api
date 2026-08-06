@@ -1,5 +1,3 @@
-// src/modules/user/user.routes.ts
-
 import { Router } from 'express';
 import * as userController from './user.controller';
 import { validate } from '../../shared/middleware/validate';
@@ -9,48 +7,25 @@ import {
   updateUserSchema,
   userQuerySchema 
 } from './user.dto';
-// TODO: Will be added later
-// import { authenticate } from '../../shared/middleware/auth';
+import { authenticate } from '../../shared/middleware/auth';
 
 // Create router instance
 const router = Router();
 
-// ============================================
-// PUBLIC ROUTES (No authentication required)
-// ============================================
 
-/**
- * Register new user
- * POST /api/users/register
- * 
- * Request Body:
- * - name: string (min 2 chars)
- * - email: string (valid email)
- * - password: string (min 8 chars, uppercase, lowercase, number)
- */
 router.post(
   '/register',
   validate(registerUserSchema),  // Validate request body against schema
   userController.register
 );
 
-/**
- * Login user
- * POST /api/users/login
- * 
- * Request Body:
- * - email: string (valid email)
- * - password: string (min 1 char)
- */
+
 router.post(
   '/login',
   validate(loginUserSchema),  // Validate request body against schema
   userController.login
 );
 
-// ============================================
-// PROTECTED ROUTES (Authentication required)
-// ============================================
 
 /**
  * Get current user profile
@@ -61,7 +36,7 @@ router.post(
  */
 router.get(
   '/profile',
-  // TODO: authenticate,  // Will be added when auth middleware is ready
+  authenticate,
   userController.getProfile
 );
 
@@ -74,7 +49,7 @@ router.get(
  */
 router.post(
   '/verify-email',
-  // TODO: authenticate,
+  authenticate,
   userController.verifyEmail
 );
 
@@ -133,7 +108,7 @@ router.delete(
  */
 router.patch(
   '/:id/avatar',
-  // TODO: authenticate,
+  authenticate,
   userController.updateAvatar
 );
 
@@ -150,10 +125,9 @@ router.patch(
  */
 router.get(
   '/',
-  // TODO: authenticate,
+  authenticate,
   validate(userQuerySchema, 'query'),  // Validate query parameters
   userController.listUsers
 );
 
-// Export routes
 export const userRoutes = router;

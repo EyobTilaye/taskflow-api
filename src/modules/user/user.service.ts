@@ -11,46 +11,22 @@ import {
 import { createAppError } from '../../shared/middleware/errorHandler';
 import { logger } from '../../shared/utils/logger/logger';
 
-// ============================================
-// CONSTANTS
-// ============================================
 
 const SALT_ROUNDS = 12;
 
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
 
-/**
- * Convert User to UserResponse (exclude password)
- * This is a pure utility function that removes sensitive data
- * 
- * @param user - User object from database (includes password)
- * @returns Safe user object without password
- */
 const toUserResponse = (user: any): UserResponse => {
   // Destructure to remove password
   const { password, ...safeUser } = user;
   return safeUser as UserResponse;
 };
 
-/**
- * Normalize email to lowercase and trim spaces
- * 
- * @param email - Raw email input
- * @returns Normalized email
- */
+
 const normalizeEmail = (email: string): string => {
   return email.toLowerCase().trim();
 };
 
-/**
- * Validate and trim name
- * 
- * @param name - Raw name input
- * @returns Trimmed name
- * @throws {AppError} If name is too short
- */
+
 const validateName = (name: string): string => {
   const trimmed = name.trim();
   if (trimmed.length < 2) {
@@ -62,23 +38,7 @@ const validateName = (name: string): string => {
   return trimmed;
 };
 
-// ============================================
-// BUSINESS LOGIC FUNCTIONS
-// ============================================
 
-/**
- * Register a new user
- * 
- * Business Rules:
- * 1. Email must be unique
- * 2. Password must be hashed before storage
- * 3. Name must be at least 2 characters
- * 4. isVerified defaults to false
- * 
- * @param data - User registration data
- * @returns Safe user data (without password)
- * @throws {AppError} If email already exists or validation fails
- */
 export const registerUser = async (data: CreateUserInput): Promise<UserResponse> => {
   // 1. Validate and normalize inputs
   const normalizedEmail = normalizeEmail(data.email);
@@ -111,19 +71,7 @@ export const registerUser = async (data: CreateUserInput): Promise<UserResponse>
   return toUserResponse(user);
 };
 
-/**
- * Login user
- * 
- * Business Rules:
- * 1. User must exist with the provided email
- * 2. Password must match the hashed password
- * 3. Login is successful if credentials are valid
- * 
- * @param email - User's email
- * @param password - User's plain text password
- * @returns Safe user data (without password)
- * @throws {AppError} If invalid credentials
- */
+
 export const loginUser = async (email: string, password: string): Promise<UserResponse> => {
   // 1. Normalize email and find user
   const normalizedEmail = normalizeEmail(email);
@@ -149,13 +97,7 @@ export const loginUser = async (email: string, password: string): Promise<UserRe
   return toUserResponse(user);
 };
 
-/**
- * Get user by ID
- * 
- * @param id - User ID
- * @returns Safe user data
- * @throws {AppError} If user not found
- */
+
 export const getUserById = async (id: string): Promise<UserResponse> => {
   const user = await userRepository.findById(id);
   
@@ -166,13 +108,7 @@ export const getUserById = async (id: string): Promise<UserResponse> => {
   return toUserResponse(user);
 };
 
-/**
- * Get user by email
- * 
- * @param email - User's email
- * @returns Safe user data
- * @throws {AppError} If user not found
- */
+
 export const getUserByEmail = async (email: string): Promise<UserResponse> => {
   const normalizedEmail = normalizeEmail(email);
   const user = await userRepository.findByEmail(normalizedEmail);
@@ -184,20 +120,7 @@ export const getUserByEmail = async (email: string): Promise<UserResponse> => {
   return toUserResponse(user);
 };
 
-/**
- * Update user
- * 
- * Business Rules:
- * 1. User must exist
- * 2. If updating email, it must be unique
- * 3. If updating password, it must be hashed
- * 4. Only provided fields are updated
- * 
- * @param id - User ID
- * @param data - Update data (all fields optional)
- * @returns Safe user data
- * @throws {AppError} If user not found or email taken
- */
+
 export const updateUser = async (
   id: string, 
   data: UpdateUserInput
@@ -264,16 +187,7 @@ export const updateUser = async (
   return toUserResponse(updatedUser);
 };
 
-/**
- * Delete user
- * 
- * Business Rules:
- * 1. User must exist
- * 2. Delete is permanent (hard delete)
- * 
- * @param id - User ID
- * @throws {AppError} If user not found
- */
+
 export const deleteUser = async (id: string): Promise<void> => {
   // 1. Check if user exists
   const user = await userRepository.findById(id);
@@ -359,17 +273,7 @@ export const listUsers = async (
   };
 };
 
-/**
- * Verify user's email
- * 
- * Business Rules:
- * 1. User must exist
- * 2. User must not already be verified
- * 
- * @param id - User ID
- * @returns Safe user data
- * @throws {AppError} If user not found or already verified
- */
+
 export const verifyEmail = async (id: string): Promise<UserResponse> => {
   // 1. Check if user exists
   const user = await userRepository.findById(id);
@@ -395,19 +299,8 @@ export const verifyEmail = async (id: string): Promise<UserResponse> => {
   return toUserResponse(verifiedUser);
 };
 
-/**
- * Update user avatar
- * 
- * Business Rules:
- * 1. User must exist
- * 2. Avatar URL must be valid (validated by DTO)
- * 3. Can be set to null to remove avatar
- * 
- * @param id - User ID
- * @param avatarUrl - Avatar URL or null
- * @returns Safe user data
- * @throws {AppError} If user not found
- */
+
+
 export const updateAvatar = async (
   id: string, 
   avatarUrl: string | null

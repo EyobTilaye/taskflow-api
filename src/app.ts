@@ -6,6 +6,7 @@ import { config } from './config/env';
 import { errorHandler } from './shared/middleware/errorHandler';
 import { logger } from './shared/utils/logger/logger';
 import { userRoutes } from './modules/user/user.routes';
+import { authRoutes} from './modules/auth/auth.routes';
 
 export const createApp = () => {
   const app = express();
@@ -36,6 +37,7 @@ export const createApp = () => {
   // API routes will be added here
   // app.use(`/api/${config.apiVersion}/auth`, authRouter);
   app.use('/api/users/', userRoutes);
+  app.use('/api/auth/', authRoutes);
 
 
 
