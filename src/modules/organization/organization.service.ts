@@ -2,13 +2,18 @@ import * as repository from "./organization.repository";
 import { OrganizationResponse,createOrganizationInput } from "./organization.type";
 import { ConflictError } from "../../shared/types/errors";
 import { logger } from "../../shared/utils/logger/logger";
+import slugify from "slugify";
 
 
 
 
 export const createOrganization = async(userId: string, data: createOrganizationInput): Promise<OrganizationResponse> =>{
 
-  const slug = data.name.toLowerCase().replace(/[a-z0-9]+/g,'-');
+  const slug = slugify(data.name, { 
+    lower: true, 
+    strict: true,
+    remove: /[*+~.()'"!:@]/g // Remove these characters
+  });
 
   const isNameExist = await repository.findBySlug(slug);
   if(isNameExist) throw new ConflictError('Organization with this name is already exists');
@@ -16,7 +21,9 @@ export const createOrganization = async(userId: string, data: createOrganization
   const organization = await repository.create({
     name: data.name,
     slug,
-    description: data.description || null,});
+    description: data.description || null,
+    logoUrl: data.logoUrl || null
+  });
 
 
   //add owner using the userId and membershipRole - owner
@@ -30,6 +37,5 @@ export const createOrganization = async(userId: string, data: createOrganization
   });
 
   return {...organization,role: 'OWNER'};
-
 
 };

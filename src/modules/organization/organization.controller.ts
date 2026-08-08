@@ -17,12 +17,34 @@ export const createOrganizationHandler = asyncHandler(async (req: Request,res: R
 });
 
 
-export const getOrganization = asyncHandler(async (req: Request, res: Response)=>{
-
-});
-
 export const getOrganizationById = asyncHandler(async(req: Request, res: Response)=>{
 
 
 });
 
+export const getOrganization = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+   
+    sendSuccess(res, null, 'Organization retrieved successfully');
+  }
+);
+
+export const updateOrganization = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const userId = (req as any).user?.userId;
+    const data = req.body as any;
+    
+    sendSuccess(res, null, 'Organization updated successfully');
+  }
+);
+
+export const deleteOrganization = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const userId = (req as any).user?.userId;
+    
+    sendSuccess(res, null, 'Organization deleted successfully', 204);
+  }
+);

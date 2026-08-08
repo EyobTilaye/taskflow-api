@@ -3,10 +3,10 @@ import {MembershipRole} from '@prisma/client';
 
 
 export const create = async (data: {
-  name: string;
-  slug: string;
-  description: string | null;
-  logoUrl: string | null;
+  name: string,
+  slug: string,
+  description: string | null,
+  logoUrl: string | null,
 })=>{
   const result = prisma.organization.create({data}); 
   return result;
@@ -67,3 +67,4 @@ export const addMember = async(data: {
   })
 
 };
+
