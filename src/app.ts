@@ -7,6 +7,7 @@ import { errorHandler } from './shared/middleware/errorHandler';
 import { logger } from './shared/utils/logger/logger';
 import { userRoutes } from './modules/user/user.routes';
 import { authRoutes} from './modules/auth/auth.routes';
+import {organizationRoutes} from './modules/organization/organization.routes';
 
 export const createApp = () => {
   const app = express();
@@ -38,7 +39,7 @@ export const createApp = () => {
   // app.use(`/api/${config.apiVersion}/auth`, authRouter);
   app.use('/api/users/', userRoutes);
   app.use('/api/auth/', authRoutes);
-
+  app.use('/api/organization/',organizationRoutes);
 
 
 
