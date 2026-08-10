@@ -25,7 +25,7 @@ export const getOrganizationById = asyncHandler(async(req: Request, res: Respons
 export const getOrganization = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-   
+  
     sendSuccess(res, null, 'Organization retrieved successfully');
   }
 );
@@ -34,7 +34,10 @@ export const updateOrganization = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const userId = (req as any).user?.userId;
+    console.log("userId: "+ userId)
     const data = req.body as any;
+
+    const organization = await organizationService.updateOrganization(id,userId,data);
     
     sendSuccess(res, null, 'Organization updated successfully');
   }

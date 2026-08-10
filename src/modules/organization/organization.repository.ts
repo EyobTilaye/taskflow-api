@@ -1,5 +1,5 @@
 import {prisma} from '../../lib/prisma';
-import {MembershipRole} from '@prisma/client';
+import {MembershipRole, Organization} from '@prisma/client';
 
 
 export const create = async (data: {
@@ -68,3 +68,22 @@ export const addMember = async(data: {
 
 };
 
+export const getUserRole = async(userId: string,organizationId: string) =>{
+  console.log("userId: "+userId);
+  return prisma.membership.findUnique({
+     where: {
+        userId_organizationId: {
+          userId,
+          organizationId,
+        },
+      },
+  });
+};
+
+
+export const update = async(id: string, data: Partial<Organization>): Promise<Organization> =>{
+  return prisma.organization.update({
+    where: {id},
+    data
+  })
+}
